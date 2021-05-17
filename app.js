@@ -22,7 +22,7 @@ bot.on('message', (msg) => {
                 if(typeof price_json.latest_price != 'undefined'){
                     bot.sendMessage(chatId, `Current Price: $${price_json.latest_price} ${price_json.price_movement}`);
                 }
-            }, 5000);
+            }, 300000);
         }
     }
 });
