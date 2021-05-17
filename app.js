@@ -3,7 +3,8 @@ const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs'), path = require('path');
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 const start_command = '/startpricebot',
-stop_command = '/stoppricebot';
+stop_command = '/stoppricebot',
+price_check_interval = 1000 * 60 * 15;
 var chatId = null, intervalTimer = null;
 
 function getPriceJson(){
@@ -25,7 +26,8 @@ bot.on('message', (msg) => {
     else if(msg.text.toString().toLowerCase().includes(stop_command) && intervalTimer != null){
         bot.sendMessage(chatId, `Price Watching: Disabled`);
         console.log(`Price Watching: Disabled`)
-        clearInterval(intervalTimer)
+        clearInterval(intervalTimer);
+        intervalTimer = null;
     }
 });
 
@@ -35,5 +37,5 @@ function watchTiddiesPrice(){
         if(typeof price_json.latest_price != 'undefined'){
             bot.sendMessage(chatId, `Current Price: $${price_json.latest_price} ${price_json.price_movement}`);
         }
-    }, 300000);
+    }, price_check_interval);
 }
