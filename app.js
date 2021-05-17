@@ -6,7 +6,7 @@ const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 var chatId = null;
 
 function getPriceJson(){
-    let json = JSON.parse(fs.readFileSync(path.resolve('../','animetiddies-discord-bot','latest-price.json')).toString());
+    let json = JSON.parse(fs.readFileSync(path.resolve('../','discord-bot','latest-price.json')).toString());
     return json;
 }
 
