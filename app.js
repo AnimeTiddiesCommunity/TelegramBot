@@ -2,7 +2,7 @@ require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs'), path = require('path');
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
-
+const command = '/startpricebot';
 var chatId = null;
 
 function getPriceJson(){
@@ -10,9 +10,12 @@ function getPriceJson(){
     return json;
 }
 
+
+
 bot.on('message', (msg) => {
     if(chatId == null){
-        if(msg.text.toString().indexOf('/startpricebot') != -1){
+        if(msg.text.toString().toLowerCase().includes(command)){
+            console.log("Price Bot Enabled")
             chatId = msg.chat.id;
             setInterval(() => {
                 let price_json = getPriceJson();
