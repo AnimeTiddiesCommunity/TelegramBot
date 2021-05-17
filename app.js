@@ -35,7 +35,7 @@ function watchTiddiesPrice(){
     intervalTimer = setInterval(() => {
         let price_json = getPriceJson();
         if(typeof price_json.latest_price != 'undefined'){
-            bot.sendMessage(chatId, `Current Price: $${price_json.latest_price} ${price_json.price_movement}`);
+            bot.sendMessage(chatId, `${price_json.price_movement} Current Price: $${price_json.latest_price.toFixed(10)}`);
         }
     }, price_check_interval);
 }
