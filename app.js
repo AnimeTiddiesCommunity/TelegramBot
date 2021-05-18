@@ -4,7 +4,7 @@ const fs = require('fs'), path = require('path');
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 const start_command = '/startpricebot',
 stop_command = '/stoppricebot',
-price_check_interval = 1000 * 60 * 15;
+price_check_interval = 1000 * 60 * 30;
 var chatId = null, intervalTimer = null;
 
 function getPriceJson(){
