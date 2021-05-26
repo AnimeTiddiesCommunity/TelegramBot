@@ -5,6 +5,7 @@ const contractText = fs.readFileSync(path.join(__dirname, 'contract.txt')).toStr
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 const start_command = '/startpricebot',
 stop_command = '/stoppricebot',
+price_command = '/price',
 price_check_interval = 1000 * 60 * 30;
 var chatId = null, intervalTimer = null;
 
@@ -28,16 +29,33 @@ bot.on('message', (msg) => {
         clearInterval(intervalTimer);
         intervalTimer = null;
     }
+    else if(msg.text.toString().toLowerCase().includes(price_command)){
+        let price_message = getPriceMessage();
+        if(price_message.length > 0){
+            bot.sendMessage(chatId, price_message);
+        }
+        else{
+            bot.sendMessage(chatId, "Price not currently available.");
+        }
+    }
     else if(msg.text.toString().toLowerCase().indexOf("contract") != -1){
         bot.sendMessage(chatId, contractText);
     }
 });
 
+function getPriceMessage(){
+    let price_json = getPriceJson(), price_message = '';
+    if(typeof price_json.latest_price != 'undefined'){
+        price_message = `${price_json.price_movement} Current Price: $${price_json.latest_price.toFixed(10)}`
+    }
+    return price_message;
+}
+
 function watchTiddiesPrice(){
     intervalTimer = setInterval(() => {
-        let price_json = getPriceJson();
-        if(typeof price_json.latest_price != 'undefined'){
-            bot.sendMessage(chatId, `${price_json.price_movement} Current Price: $${price_json.latest_price.toFixed(10)}`);
+        let price_message = getPriceMessage();
+        if(price_message.length > 0){
+            bot.sendMessage(chatId, price_message);
         }
     }, price_check_interval);
 }
