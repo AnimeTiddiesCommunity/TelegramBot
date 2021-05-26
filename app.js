@@ -1,6 +1,7 @@
 require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs'), path = require('path');
+const contractText = fs.readFileSync(path.join(__dirname, 'contract.txt')).toString();
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 const start_command = '/startpricebot',
 stop_command = '/stoppricebot',
@@ -11,8 +12,6 @@ function getPriceJson(){
     let json = JSON.parse(fs.readFileSync(path.resolve('../','discord-bot','latest-price.json')).toString());
     return json;
 }
-
-
 
 bot.on('message', (msg) => {
     if(chatId == null){
@@ -28,6 +27,9 @@ bot.on('message', (msg) => {
         console.log(`Price Watching: Disabled`)
         clearInterval(intervalTimer);
         intervalTimer = null;
+    }
+    else if(msg.text.toString().toLowerCase().indexOf("contract") != -1){
+        bot.sendMessage(chatId, contractText);
     }
 });
 
