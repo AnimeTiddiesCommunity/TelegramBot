@@ -2,6 +2,7 @@ require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const fs = require('fs'), path = require('path');
 const contractText = fs.readFileSync(path.join(__dirname, 'contract.txt')).toString();
+const chartText = fs.readFileSync(path.join(__dirname, 'chart.txt')).toString();
 const bot = new TelegramBot(process.env.TOKEN, {polling: true});
 const start_command = '/startpricebot',
 stop_command = '/stoppricebot',
@@ -40,6 +41,9 @@ bot.on('message', (msg) => {
     }
     else if(msg.text.toString().toLowerCase().indexOf("contract") != -1){
         bot.sendMessage(chatId, contractText);
+    }
+    else if(msg.text.toString().toLowerCase().indexOf("chart") != -1){
+        bot.sendMessage(chatId, chartText);
     }
 });
 
